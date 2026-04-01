@@ -16,7 +16,7 @@ async function run() {
 
     if (!cleanContent) {
         console.error("API 返回内容为空，跳过处理");
-        process.exit(1);
+        return;
     }
 
     // 2. 计算指纹

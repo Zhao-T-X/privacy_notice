@@ -26,6 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         # 这里动态读取上一步生成的列表
         site: ${{ fromJson(needs.set-matrix.outputs.matrix) }}

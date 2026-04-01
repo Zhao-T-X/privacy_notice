@@ -7,10 +7,9 @@ async function run() {
     if (!inputFilename) return;
 
     const rawData = JSON.parse(fs.readFileSync(inputFilename, 'utf8'));
-    console.error(rawData);
     // 1. 提取核心内容 (假设 API 结构为 data.contractContent)
     // 如果 API 结构不同，请根据实际返回修改路径
-    const rawContent = rawData?.contractContent || "";
+    const rawContent = rawData.info?.contractContent || "";
     console.error(rawContent);
     // 清洗 HTML 标签（API 经常返回带 <p> 标签的内容）
     const cleanContent = rawContent.replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim();

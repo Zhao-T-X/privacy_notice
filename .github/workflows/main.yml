@@ -41,6 +41,7 @@ jobs:
           http_url: ${{ matrix.site.url }}
           downloaded_filename: ${{ matrix.site.name }}.html
           axios_config: config.json
+          postprocess: process.py
           
       - name: Commit and Push
         uses: stefanzweifel/git-auto-commit-action@v5

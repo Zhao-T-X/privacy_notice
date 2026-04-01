@@ -23,7 +23,7 @@ async function run() {
     const currentHash = crypto.createHash('md5').update(cleanContent).digest('hex');
 
     const outputDir = path.join(process.cwd(), 'data');
-    const baseName = path.basename(inputFilename, '.json');
+    const baseName = path.basename(inputFilename, '.html');
     const outputPath = path.join(outputDir, `${baseName}.json`);
 
     // 3. 增量更新检查

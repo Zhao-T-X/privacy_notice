@@ -23,7 +23,7 @@ jobs:
           # 将 JSON 压缩为一行以供 GitHub Actions 输出
           echo "matrix=$(cat sites.json | jq -c .)" >> $GITHUB_OUTPUT
           # 使用 jq 提取 global_headers 并转为单行字符串
-          HEADERS=$(jq -c '.global_headers' config.json)
+          HEADERS=$(jq -c '.headers' config.json)
           echo "http_headers=$HEADERS" >> $GITHUB_OUTPUT
 
   # 任务 2：循环抓取并处理数据

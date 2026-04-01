@@ -8,40 +8,35 @@ permissions:
   contents: write
 
 jobs:
-  # 步骤 1: 读取 JSON 文件并转换为 Matrix 变量
   set-matrix:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4 # 升级到 v4
       - id: set-matrix
-        # 这行命令读取 sites.json 并压缩成一行字符串输出给下一步
         run: |
+          # 确保 sites.json 存在，否则报错提醒
+          if [ ! -f sites.json ]; then echo "sites.json not found"; exit 1; fi
           echo "matrix=$(cat sites.json | jq -c .)" >> $GITHUB_OUTPUT
 
-  # 步骤 2: 根据上一步的输出并行运行 Flat Data
   fetch-data:
     needs: set-matrix
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      max-parallel: 1
+      max-parallel: 1 # 保持 1，这是防止 Git 并发冲突最有效的手段
       matrix:
-        # 这里动态读取上一步生成的列表
         site: ${{ fromJson(needs.set-matrix.outputs.matrix) }}
     
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Setup Node.js # 增加 Node 环境确保 jsdom 安装稳定
+        uses: actions/setup-node@v4
         with:
-          python-version: '3.9'
-
-      - name: Install dependencies
-        run: pip install beautifulsoup4 
+          node-version: '20'
 
       - name: Fetch data for ${{ matrix.site.name }}
         uses: githubocto/flat@v3
@@ -49,19 +44,20 @@ jobs:
           http_url: ${{ matrix.site.url }}
           downloaded_filename: ${{ matrix.site.name }}.html
           axios_config: config.json
-          omit_commit: true
+          # 删掉 omit_commit，虽然它会报错，但我们后面会手动清理现场
           
-      - name: Process with Node.js
-        # 手动运行 JS 脚本
+      - name: Process and Cleanup
         run: |
           npm install jsdom
           node process.js ${{ matrix.site.name }}.html
-        
+          # 关键：运行完立刻删除所有中间产物，让 Git 状态回归“纯净”
+          rm -rf node_modules package.json package-lock.json ${{ matrix.site.name }}.html
+
       - name: Commit and Push
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Update ${{ matrix.site.name }} policy"
+          commit_message: "Update ${{ matrix.site.name }} policy data"
           file_pattern: 'data/*.txt'
-          push_options: '--force'
-          create_branch: false
+          push_options: '--force' # 强制推送解决分叉
           branch: main
+          skip_dirty_check: false # 只有当 txt 真的变了才提交

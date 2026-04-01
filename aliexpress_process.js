@@ -146,11 +146,14 @@ async function run() {
       console.warn('Warning: existing aliexpress.json 无法解析，将重新构造。', err.message);
       existingData = null;
     }
+    if(extractedDate == existingData.last_updated){
+       console.error('时间重合 无需更新');
+      return;
+    }
   }
 
   const preservedLastUpdated = existingData && existingData.last_updated ? existingData.last_updated : 'Unknown Date';
   const lastUpdated = extractedDate || preservedLastUpdated;
-
   const result = {
     site: 'ALIBABA-ALEXPRESS',
     last_updated: lastUpdated,

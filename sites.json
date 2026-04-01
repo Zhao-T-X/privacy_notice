@@ -1,5 +1,30 @@
 [
-   {
+  {
+    "name": "amazon",
+    "url": "https://www.amazon.com/gp/help/customer/display.html",
+    "process_name":"process"
+  },
+  {
+    "name": "shopify",
+    "url": "https://www.shopify.com/legal/privacy",
+    "process_name":"process"
+  },
+  {
+    "name": "ebay",
+    "url": "https://www.ebay.com/help/policies/member-behaviour-policies/user-privacy-notice-privacy-policy?id=4260",
+    "process_name":"process"
+  },
+  {
+    "name":"tiktok",
+    "url":"https://partner.tiktokshop.com/doc/page/63fd7444715d622a338c5091?area=us",
+    "process_name":"process"
+  },
+  {
+    "name":"octopia",
+    "url":"https://octopia.com",
+    "process_name":"octopia_process"
+  },
+  {
     "name":"aliexpress_process",
     "url":"https://terms.alicdn.com/legal-agreement/terms/suit_bu1_aliexpress/suit_bu1_aliexpress202203091437_94260.html",
     "process_name":"aliexpress_process"

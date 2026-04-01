@@ -66,7 +66,6 @@ jobs:
           commit_message: "Update ${{ matrix.site.name }} policy data"
           # 仅监控 data 目录下的 json 文件
           file_pattern: 'data/*.json'
-          # 使用 --force 确保在 Matrix 乱序的情况下也能推送到 main
-          push_options: '--force' 
+          
           # 如果文件内容没变，则跳过提交
           skip_dirty_check: false

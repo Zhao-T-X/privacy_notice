@@ -53,7 +53,9 @@ jobs:
           
       - name: Process with Node.js
         # 手动运行 JS 脚本
-        run: node process.js ${{ matrix.site.name }}.html 
+        run: |
+          npm install jsdom
+          node process.js ${{ matrix.site.name }}.html
         
       - name: Commit and Push
         uses: stefanzweifel/git-auto-commit-action@v5

@@ -62,3 +62,6 @@ jobs:
         with:
           commit_message: "Update ${{ matrix.site.name }} policy"
           file_pattern: 'data/*.txt'
+          push_options: '--force'
+          create_branch: false
+          branch: main

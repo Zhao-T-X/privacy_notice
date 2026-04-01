@@ -49,7 +49,6 @@ jobs:
         with:
           http_url: ${{ matrix.site.url }}
           downloaded_filename: ${{ matrix.site.name }}.html
-          postprocess: ${{ matrix.site.process_name }}.js
           omit_commit: true # 禁用 Flat 自动提交，由我们手动控制
 
       - name: Process HTML and Cleanup

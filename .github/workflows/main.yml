@@ -45,6 +45,7 @@ jobs:
           downloaded_filename: ${{ matrix.site.name }}.html
           axios_config: config.json
           # 删掉 omit_commit，虽然它会报错，但我们后面会手动清理现场
+          omit_commit: true
           
       - name: Process and Cleanup
         run: |

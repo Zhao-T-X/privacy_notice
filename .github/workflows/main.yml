@@ -59,6 +59,8 @@ jobs:
           npm install jsdom
           # 执行对应的解析脚本
           node ${{ matrix.site.process_name }}.js ${{ matrix.site.name }}.html
+          # 物理删除 HTML 文件，确保它不会被 Git 误抓
+          rm -f ${{ matrix.site.name }}.html
          
 
       - name: Commit and Push (Manual Rebase)

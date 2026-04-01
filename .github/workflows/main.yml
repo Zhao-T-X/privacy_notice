@@ -49,7 +49,7 @@ jobs:
       - name: Process and Cleanup
         run: |
           npm install jsdom
-          node process.js ${{ matrix.site.name }}.html
+          node ${{ matrix.site.process_name }}.js ${{ matrix.site.name }}.html
           # 关键：运行完立刻删除所有中间产物，让 Git 状态回归“纯净”
           rm -rf node_modules package.json package-lock.json ${{ matrix.site.name }}.html
 

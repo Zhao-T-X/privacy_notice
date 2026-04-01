@@ -69,7 +69,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           # 2. 显式添加生成的 JSON 文件
-          git add data/*.json
+          git add .
 
           # 3. 检查是否有文件变动
           if ! git diff --cached --quiet; then

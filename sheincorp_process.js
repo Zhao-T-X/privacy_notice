@@ -26,7 +26,7 @@ async function run() {
     const baseName = path.basename(inputFilename, '.html');
     const outputPath = path.join(outputDir, `${baseName}.json`);
    const result  // 4. 构造你的“标准格式”
-    const result = {
+    let result = {
         site: "SHEIN-OPEN-PLATFORM",
         last_updated: new Date().toISOString().split('T')[0],
         file_info: {

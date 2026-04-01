@@ -40,6 +40,9 @@ async function run() {
         displayDate = formatDate(effectiveMatch[0]);
     }
 
+    if (displayDate === "Unknown Date") { 
+        return;
+    }
     // --- 2. 提取正文 (优先级选择器) ---
     const selectors = [
         '#help_content',            // Amazon 常用
@@ -73,10 +76,27 @@ async function run() {
 
     // --- 3. 构造 JSON 对象 ---
     const baseName = path.basename(inputFilename, path.extname(inputFilename));
-    
+
+    const outputDir = path.join(process.cwd(), 'data');
+    if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true });
+    }
+
+    const outputPath = path.join(outputDir, `${baseName}.json`);
+    let existingData = null;
+    if (fs.existsSync(outputPath)) {
+        try {
+            existingData = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+        } catch (err) {
+            console.warn('[Warning] existing JSON parse failed, ignore old content:', err.message);
+        }
+    }
+
+    const parsedDate = displayDate && displayDate !== 'Unknown Date' ? displayDate : null;
+    const preservedDate = existingData && existingData.last_updated ? existingData.last_updated : null;
+
     const result = {
         site: baseName.toUpperCase(),
-        last_updated: displayDate,
         file_info: {
             type: "json",
             content_length: cleanText.length,
@@ -90,17 +110,22 @@ async function run() {
         content: cleanText
     };
 
-    // --- 4. 写入 JSON 文件 ---
-    const outputDir = path.join(process.cwd(), 'data');
-    if (!fs.existsSync(outputDir)) {
-        fs.mkdirSync(outputDir, { recursive: true });
+    // 仅当可用时才写入 last_updated，不写入 Unknown Date
+    if (parsedDate) {
+        result.last_updated = parsedDate;
+    } else if (preservedDate) {
+        result.last_updated = preservedDate;
     }
 
-    const outputPath = path.join(outputDir, `${baseName}.json`);
+    if (existingData && existingData.content) {
+        result.old_content = existingData.content;
+    }
+
+    // --- 4. 写入 JSON 文件 ---
     fs.writeFileSync(outputPath, JSON.stringify(result, null, 2), 'utf8');
 
     console.log(`[Success] Processed: ${baseName}`);
-    console.log(`          Date: ${displayDate}`);
+    console.log(`          Date: ${result.last_updated}`);
     console.log(`          Saved to: ${outputPath}`);
 }
 

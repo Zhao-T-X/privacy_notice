@@ -25,17 +25,7 @@ async function run() {
     const outputDir = path.join(process.cwd(), 'data');
     const baseName = path.basename(inputFilename, '.html');
     const outputPath = path.join(outputDir, `${baseName}.json`);
-
-    // 3. 增量更新检查
-    if (fs.existsSync(outputPath)) {
-        const oldData = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
-        if (oldData.content_hash === currentHash) {
-            console.log(`[${baseName}] 内容未变动，无需更新。`);
-            return;
-        }
-    }
-
-    // 4. 构造你的“标准格式”
+   const result  // 4. 构造你的“标准格式”
     const result = {
         site: "SHEIN-OPEN-PLATFORM",
         last_updated: new Date().toISOString().split('T')[0],
@@ -53,7 +43,15 @@ async function run() {
         },
         content: cleanContent
     };
-
+    // 3. 增量更新检查
+    if (fs.existsSync(outputPath)) {
+        const oldData = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+        if (oldData.content_hash === currentHash) {
+            console.log(`[${baseName}] 内容未变动，无需更新。`);
+            return;
+        } 
+        result.oldContent = oldData.content
+    }
     // 5. 写入
     if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
     fs.writeFileSync(outputPath, JSON.stringify(result, null, 2));

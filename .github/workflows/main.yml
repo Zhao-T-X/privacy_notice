@@ -57,7 +57,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update ${{ matrix.site.name }} policy data"
-          file_pattern: 'data/*.txt'
+          file_pattern: 'data/*.txt *.html'
           push_options: '--force' # 强制推送解决分叉
           branch: main
           skip_dirty_check: false # 只有当 txt 真的变了才提交

@@ -51,7 +51,7 @@ jobs:
           npm install jsdom
           node ${{ matrix.site.process_name }}.js ${{ matrix.site.name }}.html
           # 关键：运行完立刻删除所有中间产物，让 Git 状态回归“纯净”
-          rm -rf node_modules package.json package-lock.json 
+          rm -rf node_modules package.json package-lock.json ${{ matrix.site.name }}.html
 
       - name: Commit and Push
         uses: stefanzweifel/git-auto-commit-action@v5

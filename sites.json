@@ -33,5 +33,10 @@
     "name":"sheincorp",
     "url":"https://open.sheincorp.com/api/open/contract/getLatestContract",
     "process_name":"sheincorp_process"
+  },
+  {
+    "name":"coupang",
+    "url":"https://developers.coupangcorp.com/hc/en-us/articles/19906831184793-API-Integration-Agreement",
+    "process_name":"process"
   }
 ]

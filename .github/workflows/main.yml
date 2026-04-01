@@ -49,11 +49,14 @@ jobs:
           http_url: ${{ matrix.site.url }}
           downloaded_filename: ${{ matrix.site.name }}.html
           axios_config: config.json
-          postprocess: process.ts
+          omit_commit: true
           
+      - name: Process with Node.js
+        # 手动运行 JS 脚本
+        run: node process.js ${{ matrix.site.name }}.html 
+        
       - name: Commit and Push
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update ${{ matrix.site.name }} policy"
-          # 这个 Action 会自动处理 git pull --rebase，解决 rejected 问题
-          push_options: '--force'
+          file_pattern: 'data/*.txt'

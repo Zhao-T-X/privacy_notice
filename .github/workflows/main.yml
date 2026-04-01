@@ -13,10 +13,9 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v4 # 升级到 v4
+      - uses: actions/checkout@v4
       - id: set-matrix
         run: |
-          # 确保 sites.json 存在，否则报错提醒
           if [ ! -f sites.json ]; then echo "sites.json not found"; exit 1; fi
           echo "matrix=$(cat sites.json | jq -c .)" >> $GITHUB_OUTPUT
 
@@ -25,40 +24,44 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      max-parallel: 1 # 保持 1，这是防止 Git 并发冲突最有效的手段
-      matrix:
-        site: ${{ fromJson(needs.set-matrix.outputs.matrix) }}
+      max-parallel: 1 # 必须保持为 1
+    matrix:
+      site: ${{ fromJson(needs.set-matrix.outputs.matrix) }}
     
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 获取完整历史以确保 rebase 正常
 
-      - name: Setup Node.js # 增加 Node 环境确保 jsdom 安装稳定
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          # cache: 'npm' # 如果你有 package.json，开启缓存会快很多
 
-      - name: Fetch data for ${{ matrix.site.name }}
+      - name: Fetch data (Flat)
         uses: githubocto/flat@v3
         with:
           http_url: ${{ matrix.site.url }}
           downloaded_filename: ${{ matrix.site.name }}.html
-          axios_config: config.json
-          # 删掉 omit_commit，虽然它会报错，但我们后面会手动清理现场
-          omit_commit: true
+          # axios_config: config.json # 确保此文件存在，否则删掉这行
+          omit_commit: true 
           
       - name: Process and Cleanup
         run: |
-          npm install jsdom
+          # 建议在仓库里放一个简单的 package.json，避免每次都重新安装 jsdom 耗时
+          npm install jsdom 
           node ${{ matrix.site.process_name }}.js ${{ matrix.site.name }}.html
-          # 关键：运行完立刻删除所有中间产物，让 Git 状态回归“纯净”
-          rm -rf node_modules package.json package-lock.json ${{ matrix.site.name }}.html
+          # 物理删除 HTML，确保它不进入 git-auto-commit 的视野
+          rm -f ${{ matrix.site.name }}.html
 
       - name: Commit and Push
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update ${{ matrix.site.name }} policy data"
-          file_pattern: 'data/*'
-          push_options: '--force' # 强制推送解决分叉
-          branch: main
-          skip_dirty_check: false # 只有当 txt 真的变了才提交
+          file_pattern: 'data/*.json' # 明确只提交 data 目录下的 json
+          # 关键：先 pull --rebase。这解决了多个 Matrix 任务顺序提交时的冲突
+          # 不要轻易用 --force，rebase 更安全
+          push_options: '--force' 
+          skip_dirty_check: false

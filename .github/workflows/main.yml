@@ -22,6 +22,9 @@ jobs:
           if [ ! -f sites.json ]; then echo "sites.json not found"; exit 1; fi
           # 将 JSON 压缩为一行以供 GitHub Actions 输出
           echo "matrix=$(cat sites.json | jq -c .)" >> $GITHUB_OUTPUT
+          # 使用 jq 提取 global_headers 并转为单行字符串
+          HEADERS=$(jq -c '.global_headers' config.json)
+          echo "http_headers=$HEADERS" >> $GITHUB_OUTPUT
 
   # 任务 2：循环抓取并处理数据
   fetch-data:
@@ -51,6 +54,7 @@ jobs:
         with:
           http_url: ${{ matrix.site.url }}
           downloaded_filename: ${{ matrix.site.name }}.html
+          http_headers: 
           omit_commit: true # 禁用 Flat 自动提交，由我们手动控制
 
       - name: Process HTML and Cleanup

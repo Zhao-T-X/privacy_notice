@@ -46,7 +46,7 @@ async function run() {
     // 3. 增量更新检查
     if (fs.existsSync(outputPath)) {
         const oldData = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
-        if (oldData.content_hash === currentHash) {
+        if (oldData.metadata.content_hash === currentHash) {
             console.log(`[${baseName}] 内容未变动，无需更新。`);
             return;
         } 

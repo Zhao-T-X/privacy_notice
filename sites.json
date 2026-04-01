@@ -3,5 +3,10 @@
     "name":"aliexpress_process",
     "url":"https://terms.alicdn.com/legal-agreement/terms/suit_bu1_aliexpress/suit_bu1_aliexpress202203091437_94260.html",
     "process_name":"aliexpress_process"
+  },
+   {
+    "name":"sheincorp",
+    "url":"https://open.sheincorp.com/contract",
+    "process_name":"sheincorp_process"
   }
 ]

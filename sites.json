@@ -6,7 +6,7 @@
   },
    {
     "name":"sheincorp",
-    "url":"https://open.sheincorp.com/contract",
+    "url":"https://open.sheincorp.com/api/open/contract/getLatestContract",
     "process_name":"sheincorp_process"
   }
 ]

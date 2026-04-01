@@ -49,16 +49,15 @@ jobs:
         with:
           http_url: ${{ matrix.site.url }}
           downloaded_filename: ${{ matrix.site.name }}.html
+          postprocess: ${{ matrix.site.process_name }}.js
           omit_commit: true # 禁用 Flat 自动提交，由我们手动控制
 
       - name: Process HTML and Cleanup
         run: |
           # 安装必要的依赖
           npm install jsdom
-          
           # 执行对应的解析脚本
           node ${{ matrix.site.process_name }}.js ${{ matrix.site.name }}.html
-          
           # 物理删除 HTML 文件，确保它不会被 Git 误抓
           rm -f ${{ matrix.site.name }}.html
 

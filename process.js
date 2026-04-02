@@ -28,8 +28,9 @@ async function run() {
 
     // 读取 HTML
     const html = fs.readFileSync(inputFilename, 'utf8');
+    console.error(html)
     const dom = new JSDOM(html);
-    console.error(dom)
+    
     const document = dom.window.document;
 
     // --- 1. 提取日期 ---

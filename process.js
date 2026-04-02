@@ -66,6 +66,7 @@ async function run() {
             .replace(/\n\s*\n/g, '\n') 
             .trim() 
         : "";
+    console.error('cleanText', cleanText)
     // 匹配包含关键字的行，向前截取 50 个字符寻找日期
     const effectiveMatch = cleanText.match(/(?:Effective|Updated|Revised|生效日期|更新日期|Last updated).{0,50}/i);
     console.error('effectiveMatch', effectiveMatch)
@@ -77,7 +78,7 @@ async function run() {
         return;
     }
 
-   console.error('cleanText', cleanText)
+   
     // --- 3. 构造 JSON 对象 ---
     const baseName = path.basename(inputFilename, path.extname(inputFilename));
 

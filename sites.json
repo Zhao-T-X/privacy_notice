@@ -25,7 +25,7 @@
     "process_name": "octopia_process"
   },
   {
-    "name": "aliexpress_process",
+    "name": "aliexpress",
     "url": "https://terms.alicdn.com/legal-agreement/terms/suit_bu1_aliexpress/suit_bu1_aliexpress202203091437_94260.html",
     "process_name": "aliexpress_process"
   },
@@ -36,7 +36,7 @@
   },
   {
     "name": "coupang",
-    "url": "https://developers.coupangcorp.com/hc/en-us/articles/19906831184793-API-Integration-Agreement",
+    "url": "https://privacy.coupang.com/en/center/coupang",
     "process_name": "process"
   }
 ]

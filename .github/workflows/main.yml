@@ -9,35 +9,11 @@ permissions:
   contents: write
 
 jobs:
-  # 任务 1：解析 sites.json 并生成矩阵
-  set-matrix:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-      - id: set-matrix
-        run: |
-          RAW_JSON='${{ vars.SITES }}'
-          if [ -z "$RAW_JSON" ]; then
-            echo "错误: 环境变量 vars.SITES 为空，请检查仓库 Settings -> Variables"
-            exit 1
-          fi
-          CLEAN_JSON=$(echo "$RAW_JSON" | jq -c .)
-          # 将 JSON 压缩为一行以供 GitHub Actions 输出
-          echo "matrix=$CLEAN_JSON" >> $GITHUB_OUTPUT
 
   # 任务 2：循环抓取并处理数据
   fetch-data:
-    needs: set-matrix
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      max-parallel: 1 # 极其重要：确保多个站点按顺序提交，防止 Git 冲突
-      matrix:
-        site: ${{ fromJson(needs.set-matrix.outputs.matrix) }}
-    
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -51,22 +27,13 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Fetch data (Flat)
-        uses: githubocto/flat@v3
-        with:
-          http_url: ${{ matrix.site.url }}
-          downloaded_filename: ${{ matrix.site.name }}.html
-          axios_config: config.json
-          omit_commit: true # 禁用 Flat 自动提交，由我们手动控制
-
       - name: Process HTML and Cleanup
         run: |
           # 安装必要的依赖
           npm install jsdom
+          npm install puppeteer
           # 执行对应的解析脚本
-          node ${{ matrix.site.process_name }}.js ${{ matrix.site.name }}.html
-          # 物理删除 HTML 文件，确保它不会被 Git 误抓
-          rm -f ${{ matrix.site.name }}.html
+          node index.js
          
 
       - name: Commit and Push (Manual Rebase)

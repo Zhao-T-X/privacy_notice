@@ -36,17 +36,7 @@ async function run() {
     // --- 1. 提取日期 ---
     let displayDate = "Unknown Date";
     const bodyText = document.body.textContent || "";
-    // 匹配包含关键字的行，向前截取 50 个字符寻找日期
-    const effectiveMatch = bodyText.match(/(?:Effective|Updated|Revised|生效日期|更新日期|Last updated).{0,50}/i);
-    console.error('effectiveMatch', effectiveMatch)
-    if (effectiveMatch) {
-        displayDate = formatDate(effectiveMatch[0]);
-    }
-   console.error('displayDate', displayDate)
-    if (displayDate === "Unknown Date") { 
-        return;
-    }
-    // --- 2. 提取正文 (优先级选择器) ---
+        // --- 2. 提取正文 (优先级选择器) ---
     const selectors = [
         '#help_content',            // Amazon 常用
         '.shopify-policy__body',    // Shopify 常用
@@ -76,6 +66,17 @@ async function run() {
             .replace(/\n\s*\n/g, '\n') 
             .trim() 
         : "";
+    // 匹配包含关键字的行，向前截取 50 个字符寻找日期
+    const effectiveMatch = cleanText.match(/(?:Effective|Updated|Revised|生效日期|更新日期|Last updated).{0,50}/i);
+    console.error('effectiveMatch', effectiveMatch)
+    if (effectiveMatch) {
+        displayDate = formatDate(effectiveMatch[0]);
+    }
+   console.error('displayDate', displayDate)
+    if (displayDate === "Unknown Date") { 
+        return;
+    }
+
    console.error('cleanText', cleanText)
     // --- 3. 构造 JSON 对象 ---
     const baseName = path.basename(inputFilename, path.extname(inputFilename));

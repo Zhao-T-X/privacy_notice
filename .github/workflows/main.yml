@@ -14,18 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
-      http_headers: ${{ steps.set-matrix.outputs.http_headers }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
       - id: set-matrix
         run: |
-          if [ ! -f sites.json ]; then echo "sites.json not found"; exit 1; fi
           # 将 JSON 压缩为一行以供 GitHub Actions 输出
-          echo "matrix=$(cat sites.json | jq -c .)" >> $GITHUB_OUTPUT
-          # 使用 jq 提取 global_headers 并转为单行字符串
-          HEADERS=$(jq -c '.headers' config.json)
-          echo "http_headers=$HEADERS" >> $GITHUB_OUTPUT
+          echo "matrix=$(echo '${{ vars.SITES }}' | jq -c .)" >> $GITHUB_OUTPUT
 
   # 任务 2：循环抓取并处理数据
   fetch-data:
@@ -55,7 +50,7 @@ jobs:
         with:
           http_url: ${{ matrix.site.url }}
           downloaded_filename: ${{ matrix.site.name }}.html
-          axios_config: config.json
+          axios_config: ${{ vars.CONFIG }}
           omit_commit: true # 禁用 Flat 自动提交，由我们手动控制
 
       - name: Process HTML and Cleanup

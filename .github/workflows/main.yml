@@ -56,7 +56,7 @@ jobs:
         with:
           http_url: ${{ matrix.site.url }}
           downloaded_filename: ${{ matrix.site.name }}.html
-          axios_config: ${{ vars.CONFIG }}
+          axios_config: config.json
           omit_commit: true # 禁用 Flat 自动提交，由我们手动控制
 
       - name: Process HTML and Cleanup

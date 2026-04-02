@@ -55,7 +55,7 @@ jobs:
         with:
           http_url: ${{ matrix.site.url }}
           downloaded_filename: ${{ matrix.site.name }}.html
-          http_headers: ${{ needs.set-matrix.outputs.http_headers }}
+          axios_config: ${{ needs.set-matrix.outputs.http_headers }}
           omit_commit: true # 禁用 Flat 自动提交，由我们手动控制
 
       - name: Process HTML and Cleanup

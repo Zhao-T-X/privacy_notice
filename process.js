@@ -28,7 +28,7 @@ async function run() {
 
     // 读取 HTML
     const html = fs.readFileSync(inputFilename, 'utf8');
-    console.error(html)
+
     const dom = new JSDOM(html);
     
     const document = dom.window.document;
@@ -38,7 +38,7 @@ async function run() {
     const bodyText = document.body.textContent || "";
     // 匹配包含关键字的行，向前截取 50 个字符寻找日期
     const effectiveMatch = bodyText.match(/(?:Effective|Updated|Revised|生效日期|更新日期|Last updated).{0,50}/i);
-     console.error('effectiveMatch', effectiveMatch)
+    console.error('effectiveMatch', effectiveMatch)
     if (effectiveMatch) {
         displayDate = formatDate(effectiveMatch[0]);
     }

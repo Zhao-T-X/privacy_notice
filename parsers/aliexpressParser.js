@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 class AliExpressParser {
   async parse(page, site) {
     // 提取页面内容
@@ -8,6 +10,9 @@ class AliExpressParser {
     
     // 提取语言
     const language = await this.extractLanguage(page);
+    
+    // 计算内容hash（用于没有last_updated的平台）
+    const contentHash = crypto.createHash('md5').update(content).digest('hex');
     
     // 构造统一的返回结构
     return {
@@ -22,7 +27,8 @@ class AliExpressParser {
         source_url: site.url,
         source_file: site.name,
         selector_used: "auto",
-        extracted_at: new Date().toISOString()
+        extracted_at: new Date().toISOString(),
+        content_hash: contentHash
       },
       content: content
     };

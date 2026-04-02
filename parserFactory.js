@@ -6,6 +6,7 @@ const GenericParser = require('./parsers/genericParser');
 const SheinCorpParser = require('./parsers/sheincorpParser');
 const OctopiaParser = require('./parsers/octopiaParser');
 const AliExpressParser = require('./parsers/aliexpressParser');
+const MeltwaterParser = require('./parsers/meltwaterParser');
 
 class ParserFactory {
   static createParser(siteName) {
@@ -17,6 +18,8 @@ class ParserFactory {
       case 'aliexpress_process':
       case 'aliexpress':
         return new AliExpressParser();
+      case 'meltwater':
+        return new MeltwaterParser();
       default:
         // 其他平台使用通用解析器
         return new GenericParser();

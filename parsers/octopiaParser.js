@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 class OctopiaParser {
   async parse(page, site) {
     // 尝试从页面中找到隐私政策PDF链接
@@ -13,6 +15,10 @@ class OctopiaParser {
         ? `${dateMatch[3]}-${dateMatch[2]}-${dateMatch[1]}` 
         : null;
       
+      // 计算内容hash
+      const content = `Privacy policy available as PDF: ${pdfUrl}`;
+      const contentHash = crypto.createHash('md5').update(content).digest('hex');
+      
       // 构造统一的返回结构
       return {
         site: site.name.toUpperCase(),
@@ -26,15 +32,19 @@ class OctopiaParser {
           source_url: pdfUrl,
           source_file: site.name,
           selector_used: "privacy-policy-link",
-          extracted_at: new Date().toISOString()
+          extracted_at: new Date().toISOString(),
+          content_hash: contentHash
         },
-        content: `Privacy policy available as PDF: ${pdfUrl}`
+        content: content
       };
     } else {
       // 如果没有找到PDF链接，使用通用解析逻辑
       const content = await this.extractContent(page);
       const lastUpdated = await this.extractLastUpdated(page, content);
       const language = await this.extractLanguage(page);
+      
+      // 计算内容hash
+      const contentHash = crypto.createHash('md5').update(content).digest('hex');
       
       return {
         site: site.name.toUpperCase(),
@@ -48,7 +58,8 @@ class OctopiaParser {
           source_url: site.url,
           source_file: site.name,
           selector_used: "html-content",
-          extracted_at: new Date().toISOString()
+          extracted_at: new Date().toISOString(),
+          content_hash: contentHash
         },
         content: content
       };

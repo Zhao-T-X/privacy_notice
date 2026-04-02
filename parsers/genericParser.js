@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 class GenericParser {
   async parse(page, site) {
     // 提取页面内容
@@ -8,6 +10,9 @@ class GenericParser {
     
     // 提取语言
     const language = await this.extractLanguage(page);
+    
+    // 计算内容hash（用于没有last_updated的平台）
+    const contentHash = crypto.createHash('md5').update(content).digest('hex');
     
     // 构造统一的返回结构
     return {
@@ -22,7 +27,8 @@ class GenericParser {
         source_url: site.url,
         source_file: site.name,
         selector_used: "auto",
-        extracted_at: new Date().toISOString()
+        extracted_at: new Date().toISOString(),
+        content_hash: contentHash
       },
       content: content
     };
@@ -58,7 +64,7 @@ class GenericParser {
   async extractLastUpdated(page, content) {
     // 从内容中提取日期
     const datePatterns = [
-      /(?:Effective|Updated|Revised|生效日期|更新日期|Last updated).{0,50}/i,
+      /(?:Effective|Updated|Revised|生效日期|更新日期|Last updated| ).{0,50}/i,
       /\d{4}-\d{1,2}-\d{1,2}/,
       /[A-Z][a-z]+ \d{1,2}, \d{4}/
     ];

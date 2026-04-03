@@ -27,12 +27,15 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Process HTML and Cleanup
+      - name: Install Node Dependencies
         run: |
           # 安装必要的依赖
-          npm install 
+          npm ci
+          
+      - name: Process HTML and Cleanup
+        run: | 
           # 执行对应的解析脚本
-          node ./src/index.js
+          npm start
          
 
       - name: Commit and Push (Manual Rebase)

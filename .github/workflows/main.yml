@@ -3,6 +3,8 @@ name: Dynamic Multi-Site Monitor
 on:
   schedule:
     - cron: '0 9 * * *'
+  workflow_dispatch:
+  
 permissions:
   contents: write
 

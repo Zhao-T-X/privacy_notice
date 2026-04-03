@@ -2,9 +2,7 @@ name: Dynamic Multi-Site Monitor
 
 on:
   schedule:
-    - cron: '0 2 * * *'
-  workflow_dispatch:
-
+    - cron: '0 9 * * *'
 permissions:
   contents: write
 
@@ -30,10 +28,9 @@ jobs:
       - name: Process HTML and Cleanup
         run: |
           # 安装必要的依赖
-          npm install jsdom
-          npm install puppeteer
+          npm install 
           # 执行对应的解析脚本
-          node index.js
+          node ./src/index.js
          
 
       - name: Commit and Push (Manual Rebase)

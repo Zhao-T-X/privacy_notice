@@ -1,0 +1,85 @@
+{
+  "sites": [
+    {
+      "name": "amazon",
+      "url": "https://www.amazon.com/gp/help/customer/display.html?nodeId=GX7NJQ4ZB8MHFRNJ",
+      "compare_mode": "date",
+      "parser": "generic",
+      "selectors": ["#help_content", ".main-content", "main", "article", "body"]
+    },
+    {
+      "name": "shopify",
+      "url": "https://www.shopify.com/legal/privacy",
+      "compare_mode": "date",
+      "parser": "generic",
+      "selectors": [".shopify-policy__body", ".main-content", "main", "article", "body"]
+    },
+    {
+      "name": "ebay",
+      "url": "https://www.ebay.com/help/policies/member-behaviour-policies/user-privacy-notice-privacy-policy?id=4260",
+      "compare_mode": "date",
+      "parser": "generic",
+      "selectors": ["#mainContent", ".main-content", "main", "article", "body"]
+    },
+    {
+      "name": "tiktok",
+      "url": "https://www.tiktok.com/legal/page/global/partner-privacy-policy/en",
+      "compare_mode": "date",
+      "parser": "generic"
+    },
+    {
+      "name": "octopia",
+      "url": "https://octopia.com",
+      "compare_mode": "date",
+      "parser": "octopia"
+    },
+    {
+      "name": "aliexpress",
+      "url": "https://terms.alicdn.com/legal-agreement/terms/suit_bu1_aliexpress/suit_bu1_aliexpress202203091437_94260.html",
+      "compare_mode": "date",
+      "parser": "aliexpress"
+    },
+    {
+      "name": "aliexpress_process",
+      "url": "https://terms.alicdn.com/legal-agreement/terms/suit_bu1_aliexpress/suit_bu1_aliexpress202203091437_94260.html",
+      "compare_mode": "date",
+      "parser": "aliexpress"
+    },
+    {
+      "name": "sheincorp",
+      "url": "https://open.sheincorp.com/api/open/contract/getLatestContract",
+      "compare_mode": "hash",
+      "parser": "sheincorp"
+    },
+    {
+      "name": "coupang",
+      "url": "https://privacy.coupang.com/en/",
+      "compare_mode": "hash",
+      "parser": "generic",
+      "selectors": ["#content"]
+    },
+    {
+      "name": "meltwater",
+      "url": "https://www.meltwater.com/en/privacy",
+      "compare_mode": "date",
+      "parser": "meltwater"
+    }
+  ],
+  "global": {
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "Accept-Language": "en-US,en;q=0.9",
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8"
+    },
+    "browser": {
+      "headless": true,
+      "args": ["--no-sandbox", "--disable-setuid-sandbox"],
+      "timeout": 60000
+    },
+    "output": {
+      "dataDir": "./data",
+      "pagesDir": "./pages",
+      "logDir": "./logs"
+    }
+  }
+}

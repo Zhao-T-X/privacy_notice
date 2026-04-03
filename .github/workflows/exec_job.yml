@@ -1,4 +1,4 @@
-name: Dynamic Multi-Site Monitor
+name: Multi-Site Monitor
 
 on:
   schedule:

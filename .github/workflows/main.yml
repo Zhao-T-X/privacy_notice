@@ -30,7 +30,7 @@ jobs:
       - name: Install Node Dependencies
         run: |
           # 安装必要的依赖
-          npm ci
+          npm install
           
       - name: Process HTML and Cleanup
         run: | 

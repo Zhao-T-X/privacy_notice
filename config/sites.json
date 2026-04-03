@@ -40,12 +40,6 @@
       "parser": "aliexpress"
     },
     {
-      "name": "aliexpress_process",
-      "url": "https://terms.alicdn.com/legal-agreement/terms/suit_bu1_aliexpress/suit_bu1_aliexpress202203091437_94260.html",
-      "compare_mode": "date",
-      "parser": "aliexpress"
-    },
-    {
       "name": "sheincorp",
       "url": "https://open.sheincorp.com/api/open/contract/getLatestContract",
       "compare_mode": "hash",
@@ -72,7 +66,7 @@
       "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8"
     },
     "browser": {
-      "headless": true,
+      "headless": "new",
       "args": ["--no-sandbox", "--disable-setuid-sandbox"],
       "timeout": 60000
     },
